@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class CourierLoginTest {
+public class CourierAuthorizationTest {
 
     @Before
     public void setUrlAndRegisterNewCourier() {
@@ -37,25 +37,5 @@ public class CourierLoginTest {
         response.then().assertThat().body("id", notNullValue()).and().statusCode(200);
     }
 
-    @Test
-    public void checkResponseAfterCourierAuthorizationWithIncorrectDataTest() {
-        String incorrectCourierPassword = "incorrectpassword";
-        String incorrectCourierLogin = "incorrectlogin";
-        String bodyWithIncorrectLoginAndPassword = "{\"login\":\"" + incorrectCourierLogin + "\","
-                + "\"password\":\"" + incorrectCourierPassword + "\"}";
-        String bodyWithoutLogin = "{\"password\":\"" + incorrectCourierPassword + "\"}";
 
-        Response responseIncorrectData = given().contentType("application/json")
-                .body(bodyWithIncorrectLoginAndPassword)
-                .when()
-                .post("/api/v1/courier/login");
-        responseIncorrectData.then().assertThat().body("message", equalTo("Недостаточно данных для входа")).and().statusCode(200);
-
-        Response responseWithoutLogin = given().contentType("application/json")
-                .body(bodyWithoutLogin)
-                .when()
-                .post("/api/v1/courier/login");
-        responseWithoutLogin.then().assertThat().body("message", equalTo("Недостаточно данных для входа")).and().statusCode(400);
-
-    }
 }

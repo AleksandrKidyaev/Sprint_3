@@ -1,6 +1,7 @@
 # Idea local folder
 .idea/
-
+# Target local folder
+.target/
 # Compiled class file
 *.class
 

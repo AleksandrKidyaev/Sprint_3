@@ -1,37 +1,23 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.File;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
-public class ReturnCourierIdTest {
-
-
+public class CourierRegistrationTest {
 
     @Before
-    public void setUp() {
+    public void setUrl() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
 
     @After
-    public void tearDown () {
-        CourierDataForTest data = new CourierDataForTest();
-        int courierId = data.returnCourierId();
-
-        Response delete = given()
-                .header("Content-type", "application/json")
-                .when()
-                .delete("/api/v1/courier/" + courierId);
-        delete.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(200);
+    public void deleteCourier () {
+        CourierMethods data = new CourierMethods();
+        data.deleteCourier();
     }
 
 
