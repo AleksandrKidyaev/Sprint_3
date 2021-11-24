@@ -1,3 +1,4 @@
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
@@ -10,18 +11,19 @@ import static org.hamcrest.Matchers.*;
 public class CourierRegistrationTest {
 
     @Before
-    public void setUrl() {
+    public void setBaseUri() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
 
-    @After
+    @After //в конце каждого теста удаляем созданного курьера
     public void deleteCourier () {
         CourierMethods data = new CourierMethods();
         data.deleteCourier();
     }
-
+    //Тесты написаны по аналогии с примерами из тренажера
     @Test
-    public void registerNewCourierTest() {
+    @DisplayName("Проверка ответа после успешной регистрации курьера")
+    public void checkResponseForRegisteringANewCourierTest() {
 
         File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
 
@@ -37,7 +39,8 @@ public class CourierRegistrationTest {
     }
 
     @Test
-    public void checkRegistrationOfSecondCourierWithSameParametersTest() {
+    @DisplayName("Проверка ответа после попытки регистрации курьера по уже существующим данным")
+    public void checkResponseAfterRegistrationOfSecondCourierWithSameParametersTest() {
 
         File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
 
