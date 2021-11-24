@@ -1,26 +1,30 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class IncorrectCourierRegistrationTest {
+
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
 
-    @Test
-    public void checkRegistrationWithoutRequiredFieldsTest() {
-        String courierPassword = "testpassword";
-        String courierLogin = "testlogin";
-        String courierFirstName = "testname";
-        String bodyWithoutLogin = "{\"password\":\"" + courierPassword + "\","
-                + "\"firstName\":\"" + courierFirstName + "\"}";
-        String bodyWithoutPassword = "{\"login\":\"" + courierLogin + "\","
-                + "\"firstName\":\"" + courierFirstName + "\"}";
+    String courierPassword = RandomStringUtils.randomAlphabetic(10);
+    String courierLogin = RandomStringUtils.randomAlphabetic(10);
+    String courierFirstName = RandomStringUtils.randomAlphabetic(10);
+    String bodyWithoutLogin = "{\"password\":\"" + courierPassword + "\","
+            + "\"firstName\":\"" + courierFirstName + "\"}";
+    String bodyWithoutPassword = "{\"login\":\"" + courierLogin + "\","
+            + "\"firstName\":\"" + courierFirstName + "\"}";
+    String bodyWithouFirstName = "{\"login\":\"" + courierPassword + "\","
+            + "\"password\":\"" + courierFirstName + "\"}";
 
+    @Test
+    public void checkCourierRegistrationWithoutLoginTest() {
         Response responseWitoutLogin = given()
                 .header("Content-type", "application/json")
                 .and()
@@ -31,6 +35,10 @@ public class IncorrectCourierRegistrationTest {
                 .and()
                 .statusCode(400);
 
+    }
+
+    @Test
+    public void checkCourierRegistrationWithoutPassword() {
         Response responseWithoutPassword = given()
                 .header("Content-type", "application/json")
                 .and()
@@ -40,6 +48,5 @@ public class IncorrectCourierRegistrationTest {
         responseWithoutPassword.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
                 .and()
                 .statusCode(400);
-
     }
 }

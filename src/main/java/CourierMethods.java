@@ -1,17 +1,12 @@
 import io.restassured.response.Response;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.HttpStatus;
-
 import java.io.File;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-
 
 public class CourierMethods {
 
     public void registerNewCourier () {
-        File courierRegistrationBody = new File("src/main/resources/CourierJsonBody");
+        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
 
         given()
                 .header("Content-type", "application/json")
@@ -23,7 +18,7 @@ public class CourierMethods {
     }
 
     public int returnCourierId () {
-            File courierAuthorizationData = new File("src/main/resources/CourierJsonBody");
+            File courierAuthorizationData = new File("src/main/resources/CourierAuthorizationJsonBody");
             return given().contentType("application/json")
                     .body(courierAuthorizationData)
                     .when()

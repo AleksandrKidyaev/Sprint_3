@@ -20,11 +20,10 @@ public class CourierRegistrationTest {
         data.deleteCourier();
     }
 
-
     @Test
     public void registerNewCourierTest() {
 
-        File courierRegistrationBody = new File("src/main/resources/CourierJsonBody");
+        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
 
         Response response = given()
                 .header("Content-type", "application/json")
@@ -35,14 +34,12 @@ public class CourierRegistrationTest {
         response.then().assertThat().body("ok", equalTo(true))
                 .and()
                 .statusCode(201);
-
-
     }
 
     @Test
     public void checkRegistrationOfSecondCourierWithSameParametersTest() {
 
-        File courierRegistrationBody = new File("src/main/resources/CourierJsonBody");
+        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
 
         Response response = given()
                 .header("Content-type", "application/json")
@@ -60,7 +57,7 @@ public class CourierRegistrationTest {
                 .body(courierRegistrationBody)
                 .when()
                 .post("/api/v1/courier");
-        secondResponse.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
+        secondResponse.then().assertThat().body("message", equalTo("Этот логин уже используется"))
                 .and()
                 .statusCode(409);
         /*

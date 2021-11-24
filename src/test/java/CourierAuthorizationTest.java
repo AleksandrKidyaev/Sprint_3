@@ -3,11 +3,8 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.File;
-
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class CourierAuthorizationTest {
@@ -25,11 +22,9 @@ public class CourierAuthorizationTest {
         data.deleteCourier();
     }
 
-
-
     @Test
     public void checkResponseAfterCorrectCourierAuthorizationTest() {
-        File courierAuthorizationBody = new File("src/main/resources/CourierJsonBody");
+        File courierAuthorizationBody = new File("src/main/resources/CourierAuthorizationJsonBody");
         Response response = given().contentType("application/json")
                 .body(courierAuthorizationBody)
                 .when()
