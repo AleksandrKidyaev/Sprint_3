@@ -24,12 +24,12 @@ public class CourierRegistrationTest {
     @Test
     public void registerNewCourierTest() {
 
-        File courierRegistrationData = new File("src/main/resources/CourierRegistrationData");
+        File courierRegistrationBody = new File("src/main/resources/CourierJsonBody");
 
         Response response = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(courierRegistrationData)
+                .body(courierRegistrationBody)
                 .when()
                 .post("/api/v1/courier");
         response.then().assertThat().body("ok", equalTo(true))
@@ -42,12 +42,12 @@ public class CourierRegistrationTest {
     @Test
     public void checkRegistrationOfSecondCourierWithSameParametersTest() {
 
-        File courierRegistrationData = new File("src/main/resources/CourierRegistrationData");
+        File courierRegistrationBody = new File("src/main/resources/CourierJsonBody");
 
         Response response = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(courierRegistrationData)
+                .body(courierRegistrationBody)
                 .when()
                 .post("/api/v1/courier");
         response.then().assertThat().body("ok", equalTo(true))
@@ -57,7 +57,7 @@ public class CourierRegistrationTest {
         Response secondResponse = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(courierRegistrationData)
+                .body(courierRegistrationBody)
                 .when()
                 .post("/api/v1/courier");
         secondResponse.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))

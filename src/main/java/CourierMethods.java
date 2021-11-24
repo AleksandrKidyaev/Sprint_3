@@ -11,19 +11,19 @@ import static org.hamcrest.Matchers.equalTo;
 public class CourierMethods {
 
     public void registerNewCourier () {
-        File courierRegistrationData = new File("src/main/resources/CourierRegistrationData");
+        File courierRegistrationBody = new File("src/main/resources/CourierJsonBody");
 
         given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(courierRegistrationData)
+                .body(courierRegistrationBody)
                 .when()
                 .post("/api/v1/courier");
 
     }
 
     public int returnCourierId () {
-            File courierAuthorizationData = new File("src/main/resources/CourierAuthorizationData");
+            File courierAuthorizationData = new File("src/main/resources/CourierJsonBody");
             return given().contentType("application/json")
                     .body(courierAuthorizationData)
                     .when()

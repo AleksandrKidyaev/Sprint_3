@@ -29,9 +29,9 @@ public class CourierAuthorizationTest {
 
     @Test
     public void checkResponseAfterCorrectCourierAuthorizationTest() {
-        File courierAuthorizationData = new File("src/main/resources/CourierAuthorizationData");
+        File courierAuthorizationBody = new File("src/main/resources/CourierJsonBody");
         Response response = given().contentType("application/json")
-                .body(courierAuthorizationData)
+                .body(courierAuthorizationBody)
                 .when()
                 .post("/api/v1/courier/login");
         response.then().assertThat().body("id", notNullValue()).and().statusCode(200);
