@@ -4,13 +4,13 @@ import java.io.File;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class CourierMethods {
+public class CourierMethods extends RestAssuredSpecification{
 
     @Step("Регистрация нового курьера")
     public void registerNewCourier () {
         File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
         given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(courierRegistrationBody)
                 .when()
@@ -20,7 +20,8 @@ public class CourierMethods {
     @Step("Получение id курьера")
     public int returnCourierId () {
             File courierAuthorizationData = new File("src/main/resources/CourierAuthorizationJsonBody");
-            return given().contentType("application/json")
+            return given()
+                    .spec(getBaseSpec())
                     .body(courierAuthorizationData)
                     .when()
                     .post("/api/v1/courier/login")
@@ -32,7 +33,7 @@ public class CourierMethods {
     @Step("Удаление курьера")
     public void deleteCourier () {
         Response delete = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .when()
                 .delete("/api/v1/courier/" + returnCourierId());
         delete.then().assertThat().body("ok", equalTo(true))

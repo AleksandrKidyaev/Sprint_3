@@ -8,11 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 
-public class DeleteCourierTest {
-    @Before
-    public void setBaseUri() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-    }
+public class DeleteCourierTest extends RestAssuredSpecification{
     //По первому дополнительному заданию часть проверок уже есть в других классах,
     //поэтому в этом идет проверка, на то что курьер действительно удалился и под ним нельзя зайти
     @Test
@@ -22,7 +18,8 @@ public class DeleteCourierTest {
         data.registerNewCourier();
         data.deleteCourier();
         File courierAuthorizationBody = new File("src/main/resources/CourierAuthorizationJsonBody");
-        Response response = given().contentType("application/json")
+        Response response = given()
+                .spec(getBaseSpec())
                 .body(courierAuthorizationBody)
                 .when()
                 .post("/api/v1/courier/login");

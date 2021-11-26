@@ -7,7 +7,7 @@ import org.junit.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class IncorrectCourierRegistrationTest {
+public class IncorrectCourierRegistrationTest extends RestAssuredSpecification{
 
     private final String courierPassword = RandomStringUtils.randomAlphabetic(10);
     private final String courierLogin = RandomStringUtils.randomAlphabetic(10);
@@ -20,17 +20,13 @@ public class IncorrectCourierRegistrationTest {
     */
 
 
-    @Before
-    public void setBaseUri() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-    }
     @Test
     @DisplayName("Проверка ответа на попытку регистрации курьера без поля логина")
     public void checkCourierRegistrationWithoutLoginTest() {
         String bodyWithoutLogin = "{\"password\":\"" + courierPassword + "\","
                 + "\"firstName\":\"" + courierFirstName + "\"}";
         Response responseWitoutLogin = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(bodyWithoutLogin)
                 .when()
@@ -47,7 +43,7 @@ public class IncorrectCourierRegistrationTest {
         String bodyWithoutPassword = "{\"login\":\"" + courierLogin + "\","
                 + "\"firstName\":\"" + courierFirstName + "\"}";
         Response responseWithoutPassword = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(bodyWithoutPassword)
                 .when()

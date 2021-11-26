@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(Parameterized.class)
-public class CreateOrderParameterizedTest {
+public class CreateOrderParameterizedTest extends RestAssuredSpecification{
 
     final private String color;
 
@@ -27,11 +27,6 @@ public class CreateOrderParameterizedTest {
         };
     }
 
-    @Before
-    public void setBaseUri() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-    }
-
     @Test
     @DisplayName("Проверка ответа после создания заказа с использованием разных цветов")
     public void checkResponseForCreatingOrderWithDifferentColorsTest () {
@@ -43,7 +38,7 @@ public class CreateOrderParameterizedTest {
          */
         String createOrderBody = "{\"firstName\": \"Alexandr\",\"lastName\": \"Kidyaev\",\"address\": \"Moscow, ul. Lenina, 21\",\"metroStation\": 4,\"phone\": \"+7 915 111 22 33\",\"rentTime\": 6,\"deliveryDate\": \"2021-06-06\",\"comment\": \"Специальный JSON без окончания\"";
         Response response = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(createOrderBody + color + "}")
                 .when()

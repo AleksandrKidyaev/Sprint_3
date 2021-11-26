@@ -8,12 +8,7 @@ import java.io.File;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-public class CourierRegistrationTest {
-
-    @Before
-    public void setBaseUri() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-    }
+public class CourierRegistrationTest extends RestAssuredSpecification{
 
     @After //в конце каждого теста удаляем созданного курьера
     public void deleteCourier () {
@@ -25,10 +20,10 @@ public class CourierRegistrationTest {
     @DisplayName("Проверка ответа после успешной регистрации курьера")
     public void checkResponseForRegisteringANewCourierTest() {
 
-        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
+        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody.json");
 
         Response response = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(courierRegistrationBody)
                 .when()
@@ -42,10 +37,10 @@ public class CourierRegistrationTest {
     @DisplayName("Проверка ответа после попытки регистрации курьера по уже существующим данным")
     public void checkResponseAfterRegistrationOfSecondCourierWithSameParametersTest() {
 
-        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
+        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody.json");
 
         Response response = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(courierRegistrationBody)
                 .when()
@@ -55,7 +50,7 @@ public class CourierRegistrationTest {
                 .statusCode(201);
 
         Response secondResponse = given()
-                .header("Content-type", "application/json")
+                .spec(getBaseSpec())
                 .and()
                 .body(courierRegistrationBody)
                 .when()
