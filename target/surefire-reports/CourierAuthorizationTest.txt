@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: CourierAuthorizationTest
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 16.687 s <<< FAILURE! - in CourierAuthorizationTest
-checkResponseAfterCourierAuthorizationWithoutPasswordTest(CourierAuthorizationTest)  Time elapsed: 15.117 s  <<< ERROR!
-org.junit.runners.model.TestTimedOutException: test timed out after 15000 milliseconds
-	at app//CourierAuthorizationTest.checkResponseAfterCourierAuthorizationWithoutPasswordTest(CourierAuthorizationTest.java:60)
-
