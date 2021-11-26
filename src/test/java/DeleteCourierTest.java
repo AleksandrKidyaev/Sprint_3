@@ -1,28 +1,41 @@
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.File;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+public class DeleteCourierTest { //эндпойнт /api/v1/courier/:id
 
-public class DeleteCourierTest extends RestAssuredSpecification{
-    //По первому дополнительному заданию часть проверок уже есть в других классах,
-    //поэтому в этом идет проверка, на то что курьер действительно удалился и под ним нельзя зайти
+    private CourierMethods courierMethods;
+    private int courierId;
+
+    @Before
+    public void setUp () {
+        courierMethods = new CourierMethods();
+    }
+
     @Test
-    @DisplayName("Проверка ответа после попытки авторизоваться используя данные удаленного курьера")
+    @DisplayName("Удаление курьера.")
+    @Description("Тест корректности ответа при удалении существующего курьера для эндпойнта /api/v1/courier/:id.")
+    public void checkResponseAfterDeletingCoutier () {
+        CourierRegistrationData courierRegistrationData = CourierRegistrationData.getRandomRegistrationData();
+        courierMethods.registerNewCourier(courierRegistrationData);
+        courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
+        Response response = courierMethods.deleteCourier(courierId);
+        response.then().assertThat().body("ok", equalTo(true))
+                .and()
+                .statusCode(200);
+    }
+    @Test
+    @DisplayName("Попытка авторизации под удаленным курьером.")
+    @Description("Тест корректности ответа при попытке авторизации под только что удаленным курьером для эндпойнта /api/v1/courier/:id.")
     public void checkAbsenceOfDeletedCourierTest() {
-        CourierMethods data = new CourierMethods();
-        data.registerNewCourier();
-        data.deleteCourier();
-        File courierAuthorizationBody = new File("src/main/resources/CourierAuthorizationJsonBody");
-        Response response = given()
-                .spec(getBaseSpec())
-                .body(courierAuthorizationBody)
-                .when()
-                .post("/api/v1/courier/login");
+        CourierRegistrationData courierRegistrationData = CourierRegistrationData.getRandomRegistrationData();
+        courierMethods.registerNewCourier(courierRegistrationData);
+        courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
+        courierMethods.deleteCourier(courierId);
+        Response response = courierMethods.courierAuthorization(CourierAuthorizationData.from(courierRegistrationData));
         response.then().assertThat().body("message", equalTo("Учетная запись не найдена")).and().statusCode(404);
     }
 }

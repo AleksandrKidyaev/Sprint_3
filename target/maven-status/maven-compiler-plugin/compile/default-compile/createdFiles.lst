@@ -1,2 +1,5 @@
 CourierMethods.class
-ScooterRegisterCourier.class
+CourierRegistrationData.class
+CourierAuthorizationData.class
+OrderMethods.class
+RestAssuredSpecification.class

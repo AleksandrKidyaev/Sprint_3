@@ -1,28 +1,34 @@
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
-import java.io.File;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 public class CourierMethods extends RestAssuredSpecification{
 
-    @Step("Регистрация нового курьера")
-    public void registerNewCourier () {
-        File courierRegistrationBody = new File("src/main/resources/CourierRegistrationJsonBody");
-        given()
+    @Step("Регистрация нового курьера.")
+    public Response registerNewCourier (CourierRegistrationData registrationData) {
+        return given()
                 .spec(getBaseSpec())
                 .and()
-                .body(courierRegistrationBody)
+                .body(registrationData)
                 .when()
                 .post("/api/v1/courier");
     }
 
-    @Step("Получение id курьера")
-    public int returnCourierId () {
-            File courierAuthorizationData = new File("src/main/resources/CourierAuthorizationJsonBody");
+    @Step("Регистрация нового курьера.")
+    public Response registerNewCourierWithIncorrectData (String registrationData) {
+        return given()
+                .spec(getBaseSpec())
+                .and()
+                .body(registrationData)
+                .when()
+                .post("/api/v1/courier");
+    }
+
+    @Step("Получение id курьера после авторизации.")
+    public int returnCourierId (CourierAuthorizationData authorizationData) {
             return given()
                     .spec(getBaseSpec())
-                    .body(courierAuthorizationData)
+                    .body(authorizationData)
                     .when()
                     .post("/api/v1/courier/login")
                     .then()
@@ -30,15 +36,34 @@ public class CourierMethods extends RestAssuredSpecification{
                     .path("id");
     }
 
-    @Step("Удаление курьера")
-    public void deleteCourier () {
-        Response delete = given()
+    @Step("Авторизация.")
+    public Response courierAuthorization (CourierAuthorizationData authorizationData) {
+        return given()
+                .spec(getBaseSpec())
+                .body(authorizationData)
+                .when()
+                .post("/api/v1/courier/login");
+    }
+
+    @Step("Авторизация.")
+    public Response courierAuthorizationWithIncorrectData (String incorrectBody) {
+        return given()
+                .spec(getBaseSpec())
+                .body(incorrectBody)
+                .when()
+                .post("/api/v1/courier/login");
+    }
+
+    @Step("Удаление курьера.")
+    public Response deleteCourier (int courierId) {
+        Response delete = null;
+        if (courierId != 0) { //if написал, чтобы метод не удалял курьера с нулевым id, в тех случаях когда новый курьер не создается, но After все равно отрабатывает
+        delete = given()
                 .spec(getBaseSpec())
                 .when()
-                .delete("/api/v1/courier/" + returnCourierId());
-        delete.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(200);
+                .delete("/api/v1/courier/" + courierId);
+        }
+        return delete;
     }
 
     }

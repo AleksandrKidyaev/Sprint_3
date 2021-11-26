@@ -1,8 +1,5 @@
 CourierAuthorizationTest.class
-CourierIncorrectAuthorizationTest.class
-GetOrderList.class
 CourierRegistrationTest.class
 DeleteCourierTest.class
-IncorrectCourierRegistrationTest.class
-ScooterRegisterCourierTest.class
+GetOrderListTest.class
 CreateOrderParameterizedTest.class
