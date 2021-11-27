@@ -2,6 +2,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Test;
+
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class GetOrderListTest { //эндпойнт api/v1/orders
@@ -12,7 +14,7 @@ public class GetOrderListTest { //эндпойнт api/v1/orders
     public void checkResponseForGetTenAvailableOrdersTest () {
         OrderMethods orderList = new OrderMethods();
         Response response = orderList.getTenAvailableOrders();
-        response.then().assertThat().body("orders", notNullValue()).and().statusCode(200);
+        response.then().assertThat().body("orders", notNullValue()).and().statusCode(SC_OK);
         //можно было бы сделать (тут и в остальных тестах) сразу orderList.getTenAvailableOrders().then().assertThat() и т.д. но так показалось наглядней
     }
 }

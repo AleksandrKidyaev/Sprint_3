@@ -3,7 +3,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
-
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CourierAuthorizationTest { //эндпойнт /api/v1/courier/login
@@ -23,7 +23,7 @@ public class CourierAuthorizationTest { //эндпойнт /api/v1/courier/login
         courierMethods.registerNewCourier(courierRegistrationData);
         Response response = courierMethods.courierAuthorization(CourierAuthorizationData.from(courierRegistrationData));
         int courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
-        response.then().assertThat().body("id", equalTo(courierId)).and().statusCode(200);
+        response.then().assertThat().body("id", equalTo(courierId)).and().statusCode(SC_OK);
         //немного изменил проверку, чтобы проверялось не то что id существует, а то что он совпадает с корректным
         courierMethods.deleteCourier(courierId);
         }
@@ -34,7 +34,7 @@ public class CourierAuthorizationTest { //эндпойнт /api/v1/courier/login
     public void checkResponseAfterCourierAuthorizationWithIncorrectDataTest() {
         CourierAuthorizationData courierAuthorizationData = CourierAuthorizationData.getRandomAuthorizationData();
         Response response = courierMethods.courierAuthorization(courierAuthorizationData);
-        response.then().assertThat().body("message", equalTo("Учетная запись не найдена")).and().statusCode(404);
+        response.then().assertThat().body("message", equalTo("Учетная запись не найдена")).and().statusCode(SC_NOT_FOUND);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class CourierAuthorizationTest { //эндпойнт /api/v1/courier/login
     public void checkResponseAfterCourierAuthorizationWithoutLoginTest() {
         String bodyWithoutLogin = "{\"password\":\"somepassword\"}";
         Response response = courierMethods.courierAuthorizationWithIncorrectData(bodyWithoutLogin);
-        response.then().assertThat().body("message", equalTo("Недостаточно данных для входа")).and().statusCode(400);
+        response.then().assertThat().body("message", equalTo("Недостаточно данных для входа")).and().statusCode(SC_BAD_REQUEST);
     }
 
     @Test(timeout=15000)
@@ -58,7 +58,7 @@ public class CourierAuthorizationTest { //эндпойнт /api/v1/courier/login
     public void checkResponseAfterCourierAuthorizationWithoutPasswordTest() {
         String bodyWithoutPassword = "{\"login\":\"somelogin\"}";
         Response response = courierMethods.courierAuthorizationWithIncorrectData(bodyWithoutPassword);
-        response.then().assertThat().body("message", equalTo("Недостаточно данных для входа")).and().statusCode(400);
+        response.then().assertThat().body("message", equalTo("Недостаточно данных для входа")).and().statusCode(SC_BAD_REQUEST);
     }
 
 }

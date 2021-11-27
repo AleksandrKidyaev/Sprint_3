@@ -4,6 +4,8 @@ import io.restassured.response.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
+import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(Parameterized.class)
@@ -33,7 +35,7 @@ public class CreateOrderParameterizedTest { //эндпойнт api/v1/orders
         Response response = createOrder.createOrderWithSpecificColor(color);
         response.then().assertThat().body("track", notNullValue())
                 .and()
-                .statusCode(201);
+                .statusCode(SC_CREATED);
     }
 
 }

@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.*;
 
 public class CourierRegistrationTest { //эндпойнт /api/v1/courier
@@ -30,7 +31,7 @@ public class CourierRegistrationTest { //эндпойнт /api/v1/courier
         response.then().assertThat()
                 .body("ok", equalTo(true))
                 .and()
-                .statusCode(201);
+                .statusCode(SC_CREATED);
         courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
 
     }
@@ -45,7 +46,7 @@ public class CourierRegistrationTest { //эндпойнт /api/v1/courier
         Response response = courierMethods.registerNewCourier(courierRegistrationData);
         response.then().assertThat().body("message", equalTo("Этот логин уже используется"))
                 .and()
-                .statusCode(409);
+                .statusCode(SC_GONE);
 
         /*
         Сообщение по факту в теле ответа при попытке создания дубля курьера
@@ -63,7 +64,7 @@ public class CourierRegistrationTest { //эндпойнт /api/v1/courier
         Response response = courierMethods.registerNewCourierWithIncorrectData(bodyWithoutLogin);
         response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
                 .and()
-                .statusCode(400);
+                .statusCode(SC_BAD_REQUEST);
     }
 
     @Test
@@ -74,7 +75,7 @@ public class CourierRegistrationTest { //эндпойнт /api/v1/courier
         Response response = courierMethods.registerNewCourierWithIncorrectData(bodyWithoutPassword);
         response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
                 .and()
-                .statusCode(400);
+                .statusCode(SC_BAD_REQUEST);
     }
 
 }

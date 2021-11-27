@@ -3,6 +3,8 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 
 public class DeleteCourierTest { //эндпойнт /api/v1/courier/:id
@@ -25,7 +27,7 @@ public class DeleteCourierTest { //эндпойнт /api/v1/courier/:id
         Response response = courierMethods.deleteCourier(courierId);
         response.then().assertThat().body("ok", equalTo(true))
                 .and()
-                .statusCode(200);
+                .statusCode(SC_OK);
     }
     @Test
     @DisplayName("Попытка авторизации под удаленным курьером.")
@@ -36,6 +38,6 @@ public class DeleteCourierTest { //эндпойнт /api/v1/courier/:id
         courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
         courierMethods.deleteCourier(courierId);
         Response response = courierMethods.courierAuthorization(CourierAuthorizationData.from(courierRegistrationData));
-        response.then().assertThat().body("message", equalTo("Учетная запись не найдена")).and().statusCode(404);
+        response.then().assertThat().body("message", equalTo("Учетная запись не найдена")).and().statusCode(SC_NOT_FOUND);
     }
 }
