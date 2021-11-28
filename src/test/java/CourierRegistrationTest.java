@@ -4,9 +4,7 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.IOException;
-
 import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.*;
 
