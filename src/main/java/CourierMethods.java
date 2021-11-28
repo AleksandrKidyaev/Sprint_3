@@ -1,8 +1,23 @@
+import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import static io.restassured.RestAssured.given;
 
 public class CourierMethods extends RestAssuredSpecification{
+
+    private static final String endpointUrl = "/api/v1/courier/";
+
+    @Attachment
+    public static byte[] getSomeDoge(String resourceName) throws IOException {
+        return Files.readAllBytes(Paths.get("src/main/resources", resourceName));
+    }
+    @Step
+    public void getScreenshot () throws IOException {
+        getSomeDoge("veryTest.png");
+    }
 
     @Step("Регистрация нового курьера.")
     public Response registerNewCourier (CourierRegistrationData registrationData) {
@@ -11,7 +26,7 @@ public class CourierMethods extends RestAssuredSpecification{
                 .and()
                 .body(registrationData)
                 .when()
-                .post("/api/v1/courier");
+                .post(endpointUrl);
     }
 
     @Step("Регистрация нового курьера.")
@@ -21,7 +36,7 @@ public class CourierMethods extends RestAssuredSpecification{
                 .and()
                 .body(registrationData)
                 .when()
-                .post("/api/v1/courier");
+                .post(endpointUrl);
     }
 
     @Step("Получение id курьера после авторизации.")
@@ -30,7 +45,7 @@ public class CourierMethods extends RestAssuredSpecification{
                     .spec(getBaseSpec())
                     .body(authorizationData)
                     .when()
-                    .post("/api/v1/courier/login")
+                    .post(endpointUrl + "login")
                     .then()
                     .extract()
                     .path("id");
@@ -42,7 +57,7 @@ public class CourierMethods extends RestAssuredSpecification{
                 .spec(getBaseSpec())
                 .body(authorizationData)
                 .when()
-                .post("/api/v1/courier/login");
+                .post(endpointUrl + "login");
     }
 
     @Step("Авторизация.")
@@ -51,7 +66,7 @@ public class CourierMethods extends RestAssuredSpecification{
                 .spec(getBaseSpec())
                 .body(incorrectBody)
                 .when()
-                .post("/api/v1/courier/login");
+                .post(endpointUrl + "login");
     }
 
     @Step("Удаление курьера.")
@@ -61,7 +76,7 @@ public class CourierMethods extends RestAssuredSpecification{
         delete = given()
                 .spec(getBaseSpec())
                 .when()
-                .delete("/api/v1/courier/" + courierId);
+                .delete(endpointUrl + courierId);
         }
         return delete;
     }

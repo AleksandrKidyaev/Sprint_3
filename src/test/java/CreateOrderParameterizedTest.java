@@ -1,4 +1,4 @@
-import io.qameta.allure.Description;
+import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Test;
@@ -27,9 +27,14 @@ public class CreateOrderParameterizedTest { //эндпойнт api/v1/orders
         };
     }
 
+    @Epic(value = "API Самоката")
+    @Feature(value = "Заказ")
+    @Story(value = "Создание заказа")
     @Test
     @DisplayName("Создание заказа с указанием различных вариантов цвета.")
     @Description("Тест корректности ответа при создании нового заказа с использованием нескольких вариантов поля цвета для эндпойнта /api/v1/orders.")
+    @Owner(value = "Кидяев Александр Дмитриевич")
+    @Severity(value = SeverityLevel.MINOR)
     public void checkResponseForCreatingOrderWithDifferentColorsTest () {
         OrderMethods createOrder = new OrderMethods();
         Response response = createOrder.createOrderWithSpecificColor(color);
