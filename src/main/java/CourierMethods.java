@@ -14,7 +14,7 @@ public class CourierMethods extends RestAssuredSpecification{
     public static byte[] getSomeDoge(String resourceName) throws IOException {
         return Files.readAllBytes(Paths.get("src/main/resources", resourceName));
     }
-    @Step
+    @Step("Собачечка мемасная")
     public void getScreenshot () throws IOException {
         getSomeDoge("veryTest.png");
     }

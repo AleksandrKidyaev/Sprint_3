@@ -51,21 +51,16 @@ public class CourierRegistrationTest { //эндпойнт /api/v1/courier
     @Description("Тест корректности ответа при регистрации нового курьера по уже существующим данным для эндпойнта /api/v1/courier.")
     @Owner(value = "Кидяев Александр Дмитриевич")
     @Severity(value = SeverityLevel.CRITICAL)
-    public void checkResponseAfterRegistrationOfSecondCourierWithSameParametersTest() {
+    public void checkResponseAfterRegistrationOfSecondCourierWithSameParametersTest() throws IOException {
         CourierRegistrationData courierRegistrationData = CourierRegistrationData.getRandomRegistrationData();
         courierMethods.registerNewCourier(courierRegistrationData);
         courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
         Response response = courierMethods.registerNewCourier(courierRegistrationData);
-        response.then().assertThat().body("message", equalTo("Этот логин уже используется"))
+        courierMethods.getScreenshot();
+        response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
                 .and()
-                .statusCode(SC_GONE);
+                .statusCode(SC_CONFLICT);
 
-        /*
-        Сообщение по факту в теле ответа при попытке создания дубля курьера
-        отличается от требуемого сообщения в документации.
-        Поэтому этот тест будет падать, пока сообщение "Этот логин уже используется. Попробуйте другой."
-        не исправят в ответе на "Этот логин уже используется" (либо исправят документацию)
-         */
     }
 
     @Epic(value = "API Самоката")
