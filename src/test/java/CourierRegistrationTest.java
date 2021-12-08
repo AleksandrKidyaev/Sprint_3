@@ -57,7 +57,7 @@ public class CourierRegistrationTest { //эндпойнт /api/v1/courier
         courierId = courierMethods.returnCourierId(CourierAuthorizationData.from(courierRegistrationData));
         Response response = courierMethods.registerNewCourier(courierRegistrationData);
         courierMethods.getScreenshot();
-        response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
+        response.then().assertThat().body("message", equalTo("Этот логин уже используется")) //. Попробуйте другой.
                 .and()
                 .statusCode(SC_CONFLICT);
 
